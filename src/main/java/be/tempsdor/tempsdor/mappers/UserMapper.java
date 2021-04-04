@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper implements Mapper<UserDTO, User> {
-    private final RoleMapper roleMapper;
+    private final SmallRoleMapper smallRoleMapper;
     private final RoleRepository roleRepository;
 
-    public UserMapper(RoleMapper roleMapper, RoleRepository roleRepository) {
-        this.roleMapper = roleMapper;
+    public UserMapper(RoleMapper roleMapper, SmallRoleMapper smallRoleMapper, RoleRepository roleRepository) {
+        this.smallRoleMapper = smallRoleMapper;
         this.roleRepository = roleRepository;
     }
 
@@ -26,7 +26,7 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .lastname(entity.getLastname())
                 .firstname(entity.getFirstname())
                 .email(entity.getEmail())
-                .role(this.roleMapper.toDTO(entity.getRole()))
+                .role(this.smallRoleMapper.toDTO(entity.getRole()))
                 .build();
     }
 

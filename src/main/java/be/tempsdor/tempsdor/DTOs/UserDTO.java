@@ -36,5 +36,5 @@ public class UserDTO {
     @NotBlank
     @Email
     String email;
-    RoleDTO role;
+    SmallRoleDTO role;
 }

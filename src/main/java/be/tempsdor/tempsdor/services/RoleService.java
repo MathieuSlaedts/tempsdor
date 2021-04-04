@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface RoleService<RoleDTO> {
-    List<RoleDTO> getAll() throws ElementsNotFoundException;
-    RoleDTO getByName(String name) throws ElementNotFoundException;
+public interface RoleService<DTO> {
+    List<DTO> getAll() throws ElementsNotFoundException;
+    DTO getByName(String name) throws ElementNotFoundException;
 }

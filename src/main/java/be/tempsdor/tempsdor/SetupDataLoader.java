@@ -35,6 +35,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createUserIfNotFound("john_doe", adminRole);
         createUserIfNotFound("jane_doe", userRole);
         createUserIfNotFound("jonnie_doe", null);
+        createUserIfNotFound("janie_doe", null);
         alreadySetup = true;
 
 
