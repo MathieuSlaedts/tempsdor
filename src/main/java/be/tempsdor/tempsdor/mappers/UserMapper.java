@@ -3,12 +3,17 @@ package be.tempsdor.tempsdor.mappers;
 import be.tempsdor.tempsdor.DTOs.UserDTO;
 import be.tempsdor.tempsdor.entities.User;
 import be.tempsdor.tempsdor.repositories.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper implements Mapper<UserDTO, User> {
-    private final SmallRoleMapper smallRoleMapper;
-    private final RoleRepository roleRepository;
+
+    @Autowired
+    private SmallRoleMapper smallRoleMapper;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     public UserMapper(RoleMapper roleMapper, SmallRoleMapper smallRoleMapper, RoleRepository roleRepository) {
         this.smallRoleMapper = smallRoleMapper;

@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping("/insert")
     public void insert(@Valid @RequestBody UserDTO dto) throws ElementAlreadyExistsException, ElementNotFoundException {
-        this.userService.insert(this.userMapper.toEntity(dto));
+        this.userService.insert(dto);
     }
 
     @GetMapping

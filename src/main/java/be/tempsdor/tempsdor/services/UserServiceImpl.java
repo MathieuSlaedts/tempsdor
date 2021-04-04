@@ -6,6 +6,9 @@ import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
 import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
 import be.tempsdor.tempsdor.mappers.UserMapper;
 import be.tempsdor.tempsdor.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService<UserDTO, Integer>, UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -23,14 +26,15 @@ public class UserServiceImpl {
         this.userMapper = userMapper;
     }
 
-    public UserDTO insert(User toInsert) throws ElementAlreadyExistsException {
+    @Override
+    public UserDTO insert(UserDTO toInsert) throws ElementAlreadyExistsException {
         if(toInsert == null)
             throw new IllegalArgumentException();
 
         if(this.userRepository.existsById(toInsert.getId()))
             throw new ElementAlreadyExistsException();
 
-        return this.userMapper.toDTO(this.userRepository.save(toInsert));
+        return this.userMapper.toDTO(this.userRepository.save(this.userMapper.toEntity(toInsert)));
     }
 
     public List<UserDTO> getAll() throws ElementsNotFoundException {
@@ -42,5 +46,25 @@ public class UserServiceImpl {
         return all.stream()
                 .map(this.userMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO getOneById(Integer integer) {
+        return null;
+    }
+
+    @Override
+    public UserDTO update(UserDTO userDTO, Integer integer) {
+        return null;
+    }
+
+    @Override
+    public void delete(Integer integer) {
+
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return this.userRepository.findByUsername(s).orElseThrow(() -> new UsernameNotFoundException("User \"" + s + "\" not found"));
     }
 }

@@ -25,7 +25,10 @@ public class RoleMapper implements Mapper<RoleDTO, Role> {
                 : RoleDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .users(entity.getUsers().stream().map(this.smallUserMapper::toDTO).collect(Collectors.toList()))
+                .users(entity.getUsers()
+                        .stream()
+                        .map(this.smallUserMapper::toDTO)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -36,7 +39,10 @@ public class RoleMapper implements Mapper<RoleDTO, Role> {
                 : Role.builder()
                 .id(dto.getId())
                 .name(dto.getName())
-                .users(dto.getUsers().stream().map(c->this.userRepository.findById(c.getId()).orElseThrow(null)).collect(Collectors.toList()))
+                .users(dto.getUsers()
+                        .stream()
+                        .map(c->this.userRepository.findById(c.getId()).orElseThrow(null))
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
