@@ -40,9 +40,12 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true, nullable = false)
     String email;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "t_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    List<Role> roles;
 
     Boolean accountNonExpired;
     Boolean accountNonLocked;
@@ -51,11 +54,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == null)
+        if(this.roles == null)
             return null;
-        List<String> roles = new ArrayList<>();
-        roles.add(this.role.getName());
-        return roles.stream()
+        return this.roles.stream()
+                .map(r -> r.getName())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

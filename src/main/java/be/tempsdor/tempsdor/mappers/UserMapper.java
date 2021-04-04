@@ -6,6 +6,8 @@ import be.tempsdor.tempsdor.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper implements Mapper<UserDTO, User> {
 
@@ -31,7 +33,10 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .lastname(entity.getLastname())
                 .firstname(entity.getFirstname())
                 .email(entity.getEmail())
-                .role(this.smallRoleMapper.toDTO(entity.getRole()))
+                .roles(entity.getRoles()
+                        .stream()
+                        .map(this.smallRoleMapper::toDTO)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -46,7 +51,10 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .lastname(dto.getLastname())
                 .firstname(dto.getFirstname())
                 .email(dto.getEmail())
-                .role(this.roleRepository.findById(dto.getRole().getId()).orElse(null))
+                .roles(dto.getRoles()
+                        .stream()
+                        .map(c->this.roleRepository.findById(c.getId()).orElse(null))
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

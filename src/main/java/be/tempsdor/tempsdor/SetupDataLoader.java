@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -36,9 +38,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         Role userRole = roleRepository.findByName("ROLE_USER");
 
-        createUserIfNotFound("john_doe", adminRole);
-        createUserIfNotFound("jane_doe", userRole);
-        createUserIfNotFound("jonnie_doe", null);
+        createUserIfNotFound("john_doe", new ArrayList<Role>(List.of(adminRole,userRole)));
+        createUserIfNotFound("jane_doe", new ArrayList<Role>(List.of(adminRole)));
+        createUserIfNotFound("jonnie_doe", new ArrayList<Role>(List.of(userRole)));
         createUserIfNotFound("janie_doe", null);
         alreadySetup = true;
 
@@ -46,7 +48,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    private User createUserIfNotFound(String username, Role role) {
+    private User createUserIfNotFound(String username, List<Role> roles) {
 
         User user = this.userRepository.findByUsername(username).orElse(null);
         if (user == null) {
@@ -58,7 +60,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setLastname(usernameParts[1].substring(0, 1).toUpperCase() + usernameParts[1].substring(1));
             user.setPassword(passwordEncoder.encode("passwordByDefault"));
             user.setEmail(usernameParts[0] + "-" + usernameParts[1] + "@email.com");
-            user.setRole(role);
+            user.setRoles(roles);
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);
             user.setCredentialsNonExpired(true);
