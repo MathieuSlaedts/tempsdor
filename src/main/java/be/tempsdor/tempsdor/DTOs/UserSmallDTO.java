@@ -7,12 +7,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Builder
-public class SmallUserDTO {
+public class UserSmallDTO {
     @NotNull
     Integer id;
     @NotBlank

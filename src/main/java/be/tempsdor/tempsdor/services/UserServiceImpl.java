@@ -1,9 +1,11 @@
 package be.tempsdor.tempsdor.services;
 
+import be.tempsdor.tempsdor.DTOs.UserPertinentDTO;
 import be.tempsdor.tempsdor.DTOs.UserDTO;
 import be.tempsdor.tempsdor.entities.User;
 import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
 import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
+import be.tempsdor.tempsdor.mappers.UserPertinentMapper;
 import be.tempsdor.tempsdor.mappers.UserMapper;
 import be.tempsdor.tempsdor.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,23 +13,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService<UserDTO, Integer>, UserDetailsService {
+public class UserServiceImpl implements UserService<UserDTO, UserPertinentDTO, Integer>, UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserPertinentMapper pertinentUserMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, UserPertinentMapper pertinentUserMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.pertinentUserMapper = pertinentUserMapper;
     }
 
     @Override
-    public UserDTO insert(UserDTO toInsert) throws ElementAlreadyExistsException {
+    public UserDTO add(UserDTO toInsert) throws ElementAlreadyExistsException {
         if(toInsert == null)
             throw new IllegalArgumentException();
 
@@ -37,14 +40,14 @@ public class UserServiceImpl implements UserService<UserDTO, Integer>, UserDetai
         return this.userMapper.toDTO(this.userRepository.save(this.userMapper.toEntity(toInsert)));
     }
 
-    public List<UserDTO> getAll() throws ElementsNotFoundException {
+    public List<UserPertinentDTO> getAll() throws ElementsNotFoundException {
         List<User> all = this.userRepository.findAll();
 
         if(all.isEmpty())
             throw new ElementsNotFoundException();
 
         return all.stream()
-                .map(this.userMapper::toDTO)
+                .map(this.pertinentUserMapper::toDTO)
                 .collect(Collectors.toList());
     }
 

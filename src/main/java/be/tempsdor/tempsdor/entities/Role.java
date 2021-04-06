@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "t_role")
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)

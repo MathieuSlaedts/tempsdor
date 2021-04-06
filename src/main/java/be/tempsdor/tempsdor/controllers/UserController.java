@@ -1,5 +1,6 @@
 package be.tempsdor.tempsdor.controllers;
 
+import be.tempsdor.tempsdor.DTOs.UserPertinentDTO;
 import be.tempsdor.tempsdor.DTOs.UserDTO;
 import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
 import be.tempsdor.tempsdor.exceptions.ElementNotFoundException;
@@ -23,13 +24,13 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @PostMapping("/insert")
-    public void insert(@Valid @RequestBody UserDTO dto) throws ElementAlreadyExistsException, ElementNotFoundException {
-        this.userService.insert(dto);
+    @PostMapping("/add")
+    public void add(@Valid @RequestBody UserDTO dto) throws ElementAlreadyExistsException, ElementNotFoundException {
+        this.userService.add(dto);
     }
 
     @GetMapping
-    public List<UserDTO> getAll() throws ElementsNotFoundException {
+    public List<UserPertinentDTO> getAll() throws ElementsNotFoundException {
         return this.userService.getAll();
     }
 }

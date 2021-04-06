@@ -5,10 +5,9 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -19,5 +18,5 @@ public class RoleDTO {
     @NotNull
     @UniqueElements
     String name;
-    Set<SmallUserDTO> users;
+    Set<UserSmallDTO> users;
 }

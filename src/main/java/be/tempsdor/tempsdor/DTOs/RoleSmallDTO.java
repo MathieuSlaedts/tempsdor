@@ -6,12 +6,12 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter @Setter
 @FieldDefaults(level = AccessLevel.PACKAGE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SmallRoleDTO {
+public class RoleSmallDTO {
     @NotNull
     Integer id;
     @NotNull

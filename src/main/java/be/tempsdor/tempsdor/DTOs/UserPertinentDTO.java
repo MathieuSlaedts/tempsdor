@@ -10,20 +10,17 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserPertinentDTO {
 
     @NotNull
     Integer id;
     @NotBlank
     @Size(min = 4, max = 20)
     String username;
-    @NotBlank
-    @Size(min = 6)
-    String password;
     @NotBlank
     @Size(max = 50)
     String lastname;

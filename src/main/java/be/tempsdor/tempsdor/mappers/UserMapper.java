@@ -6,18 +6,20 @@ import be.tempsdor.tempsdor.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class UserMapper implements Mapper<UserDTO, User> {
 
     @Autowired
-    private final SmallRoleMapper smallRoleMapper;
+    private final RoleSmallMapper smallRoleMapper;
 
     @Autowired
     private final RoleRepository roleRepository;
 
-    public UserMapper(SmallRoleMapper smallRoleMapper, RoleRepository roleRepository) {
+    public UserMapper(RoleSmallMapper smallRoleMapper, RoleRepository roleRepository) {
         this.smallRoleMapper = smallRoleMapper;
         this.roleRepository = roleRepository;
     }
@@ -33,7 +35,8 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .lastname(entity.getLastname())
                 .firstname(entity.getFirstname())
                 .email(entity.getEmail())
-                .roles(entity.getRoles()
+                .roles(Optional.ofNullable(entity.getRoles())
+                        .orElseGet(Collections::emptySet)
                         .stream()
                         .map(this.smallRoleMapper::toDTO)
                         .collect(Collectors.toSet()))
@@ -51,7 +54,8 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .lastname(dto.getLastname())
                 .firstname(dto.getFirstname())
                 .email(dto.getEmail())
-                .roles(dto.getRoles()
+                .roles(Optional.ofNullable(dto.getRoles())
+                        .orElseGet(Collections::emptySet)
                         .stream()
                         .map(c->this.roleRepository.findById(c.getId()).orElse(null))
                         .collect(Collectors.toSet()))
