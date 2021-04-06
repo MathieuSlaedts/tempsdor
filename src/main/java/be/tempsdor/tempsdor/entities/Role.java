@@ -1,11 +1,11 @@
 package be.tempsdor.tempsdor.entities;
 
-import be.tempsdor.tempsdor.DTOs.SmallUserDTO;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "t_role")
@@ -19,9 +19,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     String name;
 
-    @ManyToMany(mappedBy = "roles")
-    List<User> users;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    Set<User> users;
 }

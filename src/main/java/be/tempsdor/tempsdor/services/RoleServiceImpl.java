@@ -2,13 +2,13 @@ package be.tempsdor.tempsdor.services;
 
 import be.tempsdor.tempsdor.DTOs.RoleDTO;
 import be.tempsdor.tempsdor.entities.Role;
-import be.tempsdor.tempsdor.entities.User;
 import be.tempsdor.tempsdor.exceptions.ElementNotFoundException;
 import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
 import be.tempsdor.tempsdor.mappers.RoleMapper;
 import be.tempsdor.tempsdor.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 

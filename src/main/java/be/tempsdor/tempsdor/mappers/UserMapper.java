@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 public class UserMapper implements Mapper<UserDTO, User> {
 
     @Autowired
-    private SmallRoleMapper smallRoleMapper;
+    private final SmallRoleMapper smallRoleMapper;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    public UserMapper(RoleMapper roleMapper, SmallRoleMapper smallRoleMapper, RoleRepository roleRepository) {
+    public UserMapper(SmallRoleMapper smallRoleMapper, RoleRepository roleRepository) {
         this.smallRoleMapper = smallRoleMapper;
         this.roleRepository = roleRepository;
     }
@@ -36,7 +36,7 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .roles(entity.getRoles()
                         .stream()
                         .map(this.smallRoleMapper::toDTO)
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -54,7 +54,7 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .roles(dto.getRoles()
                         .stream()
                         .map(c->this.roleRepository.findById(c.getId()).orElse(null))
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toSet()))
                 .build();
     }
 }

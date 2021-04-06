@@ -1,18 +1,14 @@
 package be.tempsdor.tempsdor.DTOs;
 
-import be.tempsdor.tempsdor.entities.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +16,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class UserDTO {
+
     @NotNull
     Integer id;
     @NotBlank
@@ -37,5 +34,5 @@ public class UserDTO {
     @NotBlank
     @Email
     String email;
-    List<SmallRoleDTO> roles;
+    Set<SmallRoleDTO> roles;
 }

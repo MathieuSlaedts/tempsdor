@@ -1,12 +1,12 @@
 package be.tempsdor.tempsdor.DTOs;
 
-import be.tempsdor.tempsdor.entities.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +19,5 @@ public class RoleDTO {
     @NotNull
     @UniqueElements
     String name;
-    List<SmallUserDTO> users;
+    Set<SmallUserDTO> users;
 }

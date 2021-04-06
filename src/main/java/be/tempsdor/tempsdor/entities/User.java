@@ -7,15 +7,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "t_user")
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -45,7 +44,7 @@ public class User implements UserDetails {
             name = "t_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    List<Role> roles;
+    Set<Role> roles;
 
     Boolean accountNonExpired;
     Boolean accountNonLocked;
@@ -57,7 +56,7 @@ public class User implements UserDetails {
         if(this.roles == null)
             return null;
         return this.roles.stream()
-                .map(r -> r.getName())
+                .map(Role::getName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

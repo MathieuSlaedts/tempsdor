@@ -6,13 +6,11 @@ import be.tempsdor.tempsdor.repositories.RoleRepository;
 import be.tempsdor.tempsdor.repositories.UserRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -29,6 +27,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (alreadySetup)
             return;
@@ -38,17 +37,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         Role userRole = roleRepository.findByName("ROLE_USER");
 
-        createUserIfNotFound("john_doe", new ArrayList<Role>(List.of(adminRole,userRole)));
-        createUserIfNotFound("jane_doe", new ArrayList<Role>(List.of(adminRole)));
-        createUserIfNotFound("jonnie_doe", new ArrayList<Role>(List.of(userRole)));
+        createUserIfNotFound("john_doe", new HashSet<>(Arrays.asList(adminRole, userRole)));
+        createUserIfNotFound("jane_doe", new HashSet<>(Arrays.asList(adminRole)));
+        createUserIfNotFound("jonnie_doe", new HashSet<>(Arrays.asList(userRole)));
         createUserIfNotFound("janie_doe", null);
+
         alreadySetup = true;
 
 
     }
 
     @Transactional
-    private User createUserIfNotFound(String username, List<Role> roles) {
+    private void createUserIfNotFound(String username, Set<Role> roles) {
 
         User user = this.userRepository.findByUsername(username).orElse(null);
         if (user == null) {
@@ -67,11 +67,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setEnabled(true);
             this.userRepository.save(user);
         }
-        return user;
     }
 
     @Transactional
-    private Role createRoleIfNotFound(String name) {
+    private void createRoleIfNotFound(String name) {
 
         Role role = this.roleRepository.findByName(name);
         if (role == null) {
@@ -80,6 +79,5 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             role.setName(name);
             this.roleRepository.save(role);
         }
-        return role;
     }
 }
