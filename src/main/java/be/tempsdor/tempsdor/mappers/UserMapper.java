@@ -2,8 +2,9 @@ package be.tempsdor.tempsdor.mappers;
 
 import be.tempsdor.tempsdor.DTOs.UserDTO;
 import be.tempsdor.tempsdor.entities.User;
+import be.tempsdor.tempsdor.repositories.BookingRepository;
 import be.tempsdor.tempsdor.repositories.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import be.tempsdor.tempsdor.repositories.RoomRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -13,15 +14,22 @@ import java.util.stream.Collectors;
 @Component
 public class UserMapper implements Mapper<UserDTO, User> {
 
-    @Autowired
-    private final RoleSmallMapper smallRoleMapper;
-
-    @Autowired
+    private final RoleSmallMapper roleSmallMapper;
     private final RoleRepository roleRepository;
 
-    public UserMapper(RoleSmallMapper smallRoleMapper, RoleRepository roleRepository) {
-        this.smallRoleMapper = smallRoleMapper;
+    private final RoomSmallMapper roomSmallMapper;
+    private final RoomRepository roomRepository;
+
+    private final BookingSmallMapper bookingSmallMapper;
+    private final BookingRepository bookingRepository;
+
+    public UserMapper(RoleSmallMapper roleSmallMapper, RoleRepository roleRepository, RoomSmallMapper roomSmallMapper, RoomRepository roomRepository, BookingSmallMapper bookingSmallMapper, BookingRepository bookingRepository) {
+        this.roleSmallMapper = roleSmallMapper;
         this.roleRepository = roleRepository;
+        this.roomSmallMapper = roomSmallMapper;
+        this.roomRepository = roomRepository;
+        this.bookingSmallMapper = bookingSmallMapper;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
@@ -38,7 +46,16 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .roles(Optional.ofNullable(entity.getRoles())
                         .orElseGet(Collections::emptySet)
                         .stream()
-                        .map(this.smallRoleMapper::toDTO)
+                        .map(this.roleSmallMapper::toDTO)
+                        .collect(Collectors.toSet()))
+                .rooms(Optional.ofNullable(entity.getRooms())
+                        .orElseGet(Collections::emptySet)
+                        .stream()
+                        .map(this.roomSmallMapper::toDTO)
+                        .collect(Collectors.toSet()))
+                .bookings(entity.getBookings()
+                        .stream()
+                        .map(this.bookingSmallMapper::toDTO)
                         .collect(Collectors.toSet()))
                 .build();
     }
@@ -57,7 +74,18 @@ public class UserMapper implements Mapper<UserDTO, User> {
                 .roles(Optional.ofNullable(dto.getRoles())
                         .orElseGet(Collections::emptySet)
                         .stream()
-                        .map(c->this.roleRepository.findById(c.getId()).orElse(null))
+                        .map(role->this.roleRepository.findById(role.getId()).orElse(null))
+                        .collect(Collectors.toSet()))
+                .rooms(Optional.ofNullable(dto.getRooms())
+                        .orElseGet(Collections::emptySet)
+                        .stream()
+                        .map(room->this.roomRepository.findById(room.getId()).orElse(null))
+                        .collect(Collectors.toSet())
+                )
+                .bookings(Optional.ofNullable(dto.getBookings())
+                        .orElseGet(Collections::emptySet)
+                        .stream()
+                        .map(b->this.bookingRepository.findById(b.getId()).orElse(null))
                         .collect(Collectors.toSet()))
                 .build();
     }

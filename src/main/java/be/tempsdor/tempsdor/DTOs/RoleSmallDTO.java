@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoleSmallDTO {
+public class RoleSmallDTO implements IdentifiedDTO<Integer> {
     @NotNull
     Integer id;
     @NotNull

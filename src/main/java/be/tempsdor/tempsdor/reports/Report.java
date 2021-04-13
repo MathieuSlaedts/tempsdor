@@ -1,17 +1,17 @@
 package be.tempsdor.tempsdor.reports;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
 public class Report {
-    String message;
-    String path;
     int status;
+    String path;
+    String message;
 }

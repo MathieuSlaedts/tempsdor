@@ -8,14 +8,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
 @Builder
-public class UserSmallDTO implements IdentifiedDTO<Integer> {
+public class ActivitySmallDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotBlank
-    @Size(min = 4, max = 20)
-    String username;
+    @Size(max = 20)
+    String name;
 }

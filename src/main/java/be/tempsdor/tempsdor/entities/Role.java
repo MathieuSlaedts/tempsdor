@@ -2,13 +2,14 @@ package be.tempsdor.tempsdor.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "t_role")
+@Table(name = "larnak_role")
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,5 +24,10 @@ public class Role {
     String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "larnak_user_role",
+//            joinColumns = @JoinColumn(name = "role_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id"))
     Set<User> users;
 }

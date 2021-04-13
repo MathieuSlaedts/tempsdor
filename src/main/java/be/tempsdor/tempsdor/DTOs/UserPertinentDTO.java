@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserPertinentDTO {
+public class UserPertinentDTO implements IdentifiedDTO<Integer> {
 
     @NotNull
     Integer id;
@@ -31,4 +31,6 @@ public class UserPertinentDTO {
     @Email
     String email;
     Set<RoleSmallDTO> roles;
+    Set<RoomSmallDTO> rooms;
+    Set<BookingSmallDTO> bookings;
 }

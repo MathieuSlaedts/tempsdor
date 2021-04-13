@@ -11,10 +11,14 @@ import java.util.stream.Collectors;
 @Component
 public class UserPertinentMapper {
 
-    private final RoleSmallMapper smallRoleMapper;
+    private final RoleSmallMapper roleSmallMapper;
+    private final RoomSmallMapper roomSmallMapper;
+    private final BookingSmallMapper bookingSmallMapper;
 
-    public UserPertinentMapper(RoleSmallMapper smallRoleMapper) {
-        this.smallRoleMapper = smallRoleMapper;
+    public UserPertinentMapper(RoleSmallMapper smallRoleMapper, RoomSmallMapper roomSmallMapper, BookingSmallMapper bookingSmallMapper) {
+        this.roleSmallMapper = smallRoleMapper;
+        this.roomSmallMapper = roomSmallMapper;
+        this.bookingSmallMapper = bookingSmallMapper;
     }
 
     public UserPertinentDTO toDTO(User entity) {
@@ -29,7 +33,17 @@ public class UserPertinentMapper {
                 .roles(Optional.ofNullable(entity.getRoles())
                         .orElseGet(Collections::emptySet)
                         .stream()
-                        .map(this.smallRoleMapper::toDTO)
+                        .map(this.roleSmallMapper::toDTO)
+                        .collect(Collectors.toSet()))
+                .rooms(Optional.ofNullable(entity.getRooms())
+                        .orElseGet(Collections::emptySet)
+                        .stream()
+                        .map(this.roomSmallMapper::toDTO)
+                        .collect(Collectors.toSet()))
+                .bookings(Optional.ofNullable(entity.getBookings())
+                        .orElseGet(Collections::emptySet)
+                        .stream()
+                        .map(this.bookingSmallMapper::toDTO)
                         .collect(Collectors.toSet()))
                 .build();
     }

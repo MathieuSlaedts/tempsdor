@@ -1,36 +1,37 @@
 package be.tempsdor.tempsdor.controllers;
 
+import be.tempsdor.tempsdor.DTOs.UserEmailOnlyDTO;
+import be.tempsdor.tempsdor.DTOs.UserPasswordOnlyDTO;
 import be.tempsdor.tempsdor.DTOs.UserPertinentDTO;
 import be.tempsdor.tempsdor.DTOs.UserDTO;
-import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
-import be.tempsdor.tempsdor.exceptions.ElementNotFoundException;
-import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
-import be.tempsdor.tempsdor.mappers.UserMapper;
+import be.tempsdor.tempsdor.exceptions.*;
+import be.tempsdor.tempsdor.services.CrudService;
 import be.tempsdor.tempsdor.services.UserServiceImpl;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends AbstractCrudController<UserDTO, UserPertinentDTO, Integer> {
 
-    private final UserServiceImpl userService;
-    private final UserMapper userMapper;
-
-    public UserController(UserServiceImpl userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
+    protected UserController(UserServiceImpl service) {
+        super(service);
     }
 
-    @PostMapping("/add")
-    public void add(@Valid @RequestBody UserDTO dto) throws ElementAlreadyExistsException, ElementNotFoundException {
-        this.userService.add(dto);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping("/{id}/update/email")
+    public UserPertinentDTO updateEmailById(@Valid @RequestBody UserEmailOnlyDTO dto, @PathVariable("id") int id) throws ElementNotFoundException {
+       return ((UserServiceImpl)service).updateEmailById(dto, id);
     }
 
-    @GetMapping
-    public List<UserPertinentDTO> getAll() throws ElementsNotFoundException {
-        return this.userService.getAll();
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping("{id}/update/password")
+    public UserPertinentDTO updatePasswordById(@Valid @RequestBody UserPasswordOnlyDTO dto, @PathVariable("id") int id) throws ElementNotFoundException {
+        return ((UserServiceImpl)service).updatePasswordById(dto, id);
     }
 }

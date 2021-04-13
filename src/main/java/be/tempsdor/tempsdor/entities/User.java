@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "t_user")
+@Table(name = "larnak_user")
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,10 +41,16 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "t_user_role",
+            name = "larnak_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    Set<Room> rooms;
+
+    @OneToMany(mappedBy = "user")
+    Set<Booking> bookings;
 
     Boolean accountNonExpired;
     Boolean accountNonLocked;

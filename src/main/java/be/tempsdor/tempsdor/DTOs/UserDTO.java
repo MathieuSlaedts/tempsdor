@@ -1,8 +1,10 @@
 package be.tempsdor.tempsdor.DTOs;
 
+import be.tempsdor.tempsdor.entities.Room;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class UserDTO {
+public class UserDTO implements IdentifiedDTO<Integer> {
 
     @NotNull
     Integer id;
@@ -34,4 +36,6 @@ public class UserDTO {
     @Email
     String email;
     Set<RoleSmallDTO> roles;
+    Set<RoomSmallDTO> rooms;
+    Set<BookingSmallDTO> bookings;
 }
