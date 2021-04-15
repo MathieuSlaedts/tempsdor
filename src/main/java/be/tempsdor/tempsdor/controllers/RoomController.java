@@ -20,13 +20,13 @@ import java.util.Map;
 @RestController
 @PreAuthorize("isAuthenticated()")
 @RequestMapping("/rooms")
-public class RoomController extends AbstractCrudController<RoomDTO, RoomPertinentDTO, Integer> {
+public class RoomController extends AbstractCrudController<RoomPertinentDTO, RoomPertinentDTO, Long> {
     public RoomController(RoomServiceImpl service) {
         super(service);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/fulldatas")
+    @GetMapping("/full-datas")
     public List<RoomDTO> getAllWithFullDatas() throws ElementsNotFoundException {
         return ((RoomServiceImpl)service).getAllWithFullDatas();
     }
@@ -38,7 +38,7 @@ public class RoomController extends AbstractCrudController<RoomDTO, RoomPertinen
 
     @GetMapping("/{id}/availability")
     public Map<String, String> getAvailabilityByDateRange(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestParam("arrival") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate arrival,
             @RequestParam("departure") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departure) throws ElementsNotFoundException, ElementNotFoundException {
         Boolean availability = ((RoomServiceImpl)service).getAvailabilityByDateRange(id, arrival, departure);
@@ -52,7 +52,7 @@ public class RoomController extends AbstractCrudController<RoomDTO, RoomPertinen
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("{id}/update/manager")
-    public RoomPertinentDTO updatePasswordById(@Valid @RequestBody RoomManagerIdOnlyDTO dto, @PathVariable("id") int id) throws ElementNotFoundException, MismatchingIdentifersException {
+    public RoomPertinentDTO updatePasswordById(@Valid @RequestBody RoomManagerIdOnlyDTO dto, @PathVariable("id") Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         return ((RoomServiceImpl)service).updateManagerById(dto, id);
     }
 }

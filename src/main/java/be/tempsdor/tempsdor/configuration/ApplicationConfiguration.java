@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class ApplicationConfiguration {
+    public static final String DB_TABLE_PREFIX = "larnak_";
 
     @Bean
     public PasswordEncoder passwordEncoder() {

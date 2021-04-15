@@ -5,6 +5,7 @@ import be.tempsdor.tempsdor.entities.Role;
 import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
 import be.tempsdor.tempsdor.exceptions.ElementNotFoundException;
 import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
+import be.tempsdor.tempsdor.exceptions.MismatchingIdentifersException;
 import be.tempsdor.tempsdor.mappers.RoleMapper;
 import be.tempsdor.tempsdor.repositories.RoleRepository;
 import be.tempsdor.tempsdor.repositories.UserRepository;
@@ -69,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDTO getOneById(Integer id) throws ElementNotFoundException {
+    public RoleDTO getOneById(Long id) throws ElementNotFoundException {
         if(id == null)
             throw new IllegalArgumentException();
 
@@ -81,9 +82,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public RoleDTO update(RoleDTO updatedDatas, Integer id) throws ElementNotFoundException {
+    public RoleDTO update(RoleDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         if(updatedDatas == null || id == null)
             throw new IllegalArgumentException();
+
+        if(updatedDatas.getId() != id)
+            throw new MismatchingIdentifersException();
 
         Role role = this.roleMapper.toEntity(updatedDatas);
 
@@ -101,7 +105,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void deleteById(Integer id) throws ElementNotFoundException {
+    public void deleteById(Long id) throws ElementNotFoundException {
         if(id == null)
             throw new IllegalArgumentException();
 

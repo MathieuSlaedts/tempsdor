@@ -1,38 +1,40 @@
 package be.tempsdor.tempsdor.entities;
 
+import be.tempsdor.tempsdor.configuration.ApplicationConfiguration;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
-@Table(name = "larnak_booking")
+@Table(name = ApplicationConfiguration.DB_TABLE_PREFIX + "booking")
 @Getter @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
-    @Column(name = "number_occupants", nullable = false)
+    @Column(nullable = false)
     Integer numberOccupants;
 
-    @Column(name = "arrival_datetime", nullable = false)
-    LocalDateTime arrivalDatetime;
+    @Column(nullable = false)
+    LocalDate arrival;
 
-    @Column(name = "departure_datetime", nullable = false)
-    LocalDateTime departureDatetime;
+    @Column(nullable = false)
+    LocalDate departure;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     User user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name= "room_id")
     Room room;
 }

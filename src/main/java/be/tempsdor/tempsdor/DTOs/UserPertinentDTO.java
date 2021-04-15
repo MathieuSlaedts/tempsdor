@@ -14,10 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserPertinentDTO implements IdentifiedDTO<Integer> {
-
+public class UserPertinentDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotBlank
     @Size(min = 4, max = 20)
     String username;
@@ -30,7 +29,6 @@ public class UserPertinentDTO implements IdentifiedDTO<Integer> {
     @NotBlank
     @Email
     String email;
-    Set<RoleSmallDTO> roles;
-    Set<RoomSmallDTO> rooms;
-    Set<BookingSmallDTO> bookings;
+    Set<Long> rooms;
+    Set<Long> bookings;
 }

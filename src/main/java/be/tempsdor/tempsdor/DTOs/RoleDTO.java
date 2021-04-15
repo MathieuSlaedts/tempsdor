@@ -8,13 +8,13 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Getter @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class RoleDTO implements IdentifiedDTO<Integer> {
+public class RoleDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotNull
     String name;
     Set<UserSmallDTO> users;

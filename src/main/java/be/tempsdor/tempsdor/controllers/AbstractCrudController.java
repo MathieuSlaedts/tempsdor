@@ -1,9 +1,7 @@
 package be.tempsdor.tempsdor.controllers;
 
 import be.tempsdor.tempsdor.DTOs.IdentifiedDTO;
-import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
-import be.tempsdor.tempsdor.exceptions.ElementNotFoundException;
-import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
+import be.tempsdor.tempsdor.exceptions.*;
 import be.tempsdor.tempsdor.reports.Report;
 import be.tempsdor.tempsdor.services.CrudService;
 import org.springframework.http.ResponseEntity;
@@ -14,37 +12,37 @@ import javax.validation.Valid;
 import java.util.List;
 
 @PreAuthorize("isAuthenticated()")
-public abstract class AbstractCrudController<FORM extends IdentifiedDTO<ID>, DTO, ID> implements CrudController<FORM, DTO, Report, ID> {
-    protected final CrudService<FORM, DTO, ID> service;
+public abstract class AbstractCrudController<DTO_IN extends IdentifiedDTO<ID>,DTO_OUT, ID> implements CrudController<DTO_IN, DTO_OUT, ID> {
+    protected final CrudService<DTO_IN, DTO_OUT, ID> service;
 
-    public AbstractCrudController(CrudService<FORM, DTO, ID> service) {
+    public AbstractCrudController(CrudService<DTO_IN, DTO_OUT, ID> service) {
         this.service = service;
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
-    public DTO add(@Valid @RequestBody FORM form) throws ElementAlreadyExistsException, ElementNotFoundException {
-        return this.service.add(form);
+    public DTO_OUT add(@Valid @RequestBody DTO_IN dto) throws ElementAlreadyExistsException, ElementNotFoundException, OwnRoomBookingException, RoomUnavailableException {
+        return this.service.add(dto);
     }
 
     @Override
     @GetMapping
-    public List<DTO> getAll() throws ElementsNotFoundException {
+    public List<DTO_OUT> getAll() throws ElementsNotFoundException {
         return this.service.getAll();
     }
 
     @Override
     @GetMapping("/{id}")
-    public DTO getOneById(@PathVariable("id") ID id) throws ElementNotFoundException {
+    public DTO_OUT getOneById(@PathVariable("id") ID id) throws ElementNotFoundException {
         return this.service.getOneById(id);
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}/update")
-    public DTO update(@Valid @RequestBody FORM form,@PathVariable("id") ID id) throws ElementNotFoundException {
-        return this.service.update(form, id);
+    public DTO_OUT update(@Valid @RequestBody DTO_IN dto,@PathVariable("id") ID id) throws ElementNotFoundException, RoomUnavailableException, MismatchingIdentifersException, OwnRoomBookingException {
+        return this.service.update(dto, id);
     }
 
     @Override

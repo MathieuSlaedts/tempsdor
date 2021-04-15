@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -60,28 +61,28 @@ private final EntityManager entityManager;
                 null);
 
         Room room1 = createRoomIfNotFound(
-                1,
+                1L,
                 4,
                 "Rue de Moscou 34",
                 "Saint-Gilles",
                 user1);
 
         Room room2 = createRoomIfNotFound(
-                2,
+                2L,
                 3,
                 "Avenue Louis Bertrand 23",
                 "Schaerbeek",
                 user3);
 
         Room room3 = createRoomIfNotFound(
-                3,
+                3L,
                 2,
                 "Chaussée d'Alsemberg 172",
                 "Forest",
                 user1);
 
         Room room4 = createRoomIfNotFound(
-                4,
+                4L,
                 2,
                 "Chaussée d’Ixelles 355",
                 "Ixelles",
@@ -108,34 +109,34 @@ private final EntityManager entityManager;
                 new HashSet<>(Collections.singletonList(room1)));
 
         Booking booking1 = createBookingIfNotFound(
-                1,
+                1L,
                 3,
-                LocalDateTime.of(2021, 4, 10, 8, 0),
-                LocalDateTime.of(2021, 4, 12, 8, 0),
+                LocalDate.of(2021, 4, 10),
+                LocalDate.of(2021, 4, 12),
                 user1,
                 room2);
 
         Booking booking2 = createBookingIfNotFound(
-                2,
+                2L,
                 1,
-                LocalDateTime.of(2021, 4, 20, 8, 0),
-                LocalDateTime.of(2021, 4, 23, 8, 0),
+                LocalDate.of(2021, 4, 20),
+                LocalDate.of(2021, 4, 23),
                 user2,
                 room2);
 
         Booking booking3 = createBookingIfNotFound(
-                3,
+                3L,
                 4,
-                LocalDateTime.of(2021, 4, 10, 8, 0),
-                LocalDateTime.of(2021, 4, 11, 8, 0),
+                LocalDate.of(2021, 4, 10),
+                LocalDate.of(2021, 4, 11),
                 user1,
                 room4);
 
         Booking booking4 = createBookingIfNotFound(
-                4,
+                4L,
                 2,
-                LocalDateTime.of(2021, 4, 20, 8, 0),
-                LocalDateTime.of(2021, 4, 24, 8, 0),
+                LocalDate.of(2021, 4, 20),
+                LocalDate.of(2021, 4, 24),
                 user4,
                 room1);
 
@@ -146,7 +147,7 @@ private final EntityManager entityManager;
     private Role createRoleIfNotFound(String name) {
         if (!this.roleRepository.existsByName(name)) {
             this.roleRepository.saveAndFlush(Role.builder()
-                    .id(0)
+                    .id(0L)
                     .name(name)
                     .build());
         }
@@ -157,7 +158,7 @@ private final EntityManager entityManager;
     private User createUserIfNotFound(String username, Set<Role> roles) {
         if(!this.userRepository.existsByUsername(username)) {
             this.userRepository.saveAndFlush(User.builder()
-                    .id(0)
+                    .id(0L)
                     .username(username)
                     .firstname(username.split("_")[0].substring(0, 1).toUpperCase() + username.split("_")[0].substring(1))
                     .lastname(username.split("_")[1].substring(0, 1).toUpperCase() + username.split("_")[1].substring(1))
@@ -174,7 +175,7 @@ private final EntityManager entityManager;
     }
 
     @Transactional
-    private Room createRoomIfNotFound(Integer id, int capacity, String address, String city, User user) {
+    private Room createRoomIfNotFound(Long id, int capacity, String address, String city, User user) {
         if (!this.roomRepository.existsById(id)) {
             this.roomRepository.saveAndFlush(Room.builder()
                     .id(id)
@@ -202,14 +203,14 @@ private final EntityManager entityManager;
     }
 
     @Transactional
-    private Booking createBookingIfNotFound(Integer id, int numberOccupants, LocalDateTime arrivalDatetime, LocalDateTime departureDatetime, User user, Room room) {
+    private Booking createBookingIfNotFound(Long id, int numberOccupants, LocalDate arrival, LocalDate departure, User user, Room room) {
         if (!this.bookingRepository.existsById(id)) {
             this.bookingRepository.saveAndFlush(
                     Booking.builder()
                             .id(id)
                             .numberOccupants(numberOccupants)
-                            .arrivalDatetime(arrivalDatetime)
-                            .departureDatetime(departureDatetime)
+                            .arrival(arrival)
+                            .departure(departure)
                             .user(user)
                             .room(room)
                             .build());

@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,7 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookingSmallDTO implements IdentifiedDTO<Integer> {
-    Integer id;
+public class BookingSmallDTO implements IdentifiedDTO<Long> {
+    @NotNull
+    Long id;
     String dates;
+    String uri;
 }

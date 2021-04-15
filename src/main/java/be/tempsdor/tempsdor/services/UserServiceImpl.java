@@ -9,6 +9,7 @@ import be.tempsdor.tempsdor.entities.User;
 import be.tempsdor.tempsdor.exceptions.ElementAlreadyExistsException;
 import be.tempsdor.tempsdor.exceptions.ElementNotFoundException;
 import be.tempsdor.tempsdor.exceptions.ElementsNotFoundException;
+import be.tempsdor.tempsdor.exceptions.MismatchingIdentifersException;
 import be.tempsdor.tempsdor.mappers.UserPertinentMapper;
 import be.tempsdor.tempsdor.mappers.UserMapper;
 import be.tempsdor.tempsdor.repositories.RoleRepository;
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserPertinentDTO getOneById(Integer id) throws ElementNotFoundException {
+    public UserPertinentDTO getOneById(Long id) throws ElementNotFoundException {
         if(id == null)
             throw new IllegalArgumentException();
 
@@ -99,9 +100,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserPertinentDTO update(UserDTO updatedDatas, Integer id) throws ElementNotFoundException {
+    public UserPertinentDTO update(UserDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         if(updatedDatas == null || id == null)
             throw new IllegalArgumentException();
+
+        if(updatedDatas.getId() != id)
+            throw new MismatchingIdentifersException();
 
         if(!this.userRepository.existsById(id))
             throw new ElementNotFoundException();
@@ -118,9 +122,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserPertinentDTO updateEmailById(UserEmailOnlyDTO updatedDatas, Integer id) throws ElementNotFoundException {
+    public UserPertinentDTO updateEmailById(UserEmailOnlyDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         if(updatedDatas == null || id == null)
             throw new IllegalArgumentException();
+
+        if(updatedDatas.getId() != id)
+            throw new MismatchingIdentifersException();
 
         User user = this.userRepository
                 .findById(id)
@@ -132,12 +139,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserPertinentDTO updatePasswordById(UserPasswordOnlyDTO updatedDatas, Integer id) throws ElementNotFoundException {
+    public UserPertinentDTO updatePasswordById(UserPasswordOnlyDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         if(updatedDatas == null || id == null)
             throw new IllegalArgumentException();
 
-        User user = this.userRepository
-                .findById(id)
+        if(updatedDatas.getId() != id)
+            throw new MismatchingIdentifersException();
+
+        User user = this.userRepository.findById(id)
                 .orElseThrow(ElementNotFoundException::new);
         user.setPassword(passwordEncoder.encode(updatedDatas.getPassword()));
 
@@ -146,7 +155,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void deleteById(Integer id) throws ElementNotFoundException {
+    public void deleteById(Long id) throws ElementNotFoundException {
         if(id == null)
             throw new IllegalArgumentException();
 

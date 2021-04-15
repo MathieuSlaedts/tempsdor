@@ -9,9 +9,9 @@ import be.tempsdor.tempsdor.exceptions.MismatchingIdentifersException;
 
 import java.time.LocalDate;
 import java.util.List;
-public interface RoomService extends CrudService<RoomDTO, RoomPertinentDTO, Integer> {
+public interface RoomService extends CrudService<RoomPertinentDTO, RoomPertinentDTO, Long> {
     List<RoomDTO> getAllWithFullDatas() throws ElementsNotFoundException;
     List<RoomPertinentDTO> getAllByActivity(Long activityId) throws ElementsNotFoundException, ElementNotFoundException;
-    Boolean getAvailabilityByDateRange(Integer id, LocalDate arrival, LocalDate departure) throws ElementNotFoundException;
-    RoomPertinentDTO updateManagerById(RoomManagerIdOnlyDTO updatedDatas, Integer id) throws ElementNotFoundException, MismatchingIdentifersException;
+    Boolean getAvailabilityByDateRange(Long id, LocalDate arrival, LocalDate departure) throws ElementNotFoundException;
+    RoomPertinentDTO updateManagerById(RoomManagerIdOnlyDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException;
 }

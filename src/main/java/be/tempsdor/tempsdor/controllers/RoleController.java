@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @PreAuthorize("isAuthenticated()")
 @RequestMapping("/roles")
-public class RoleController extends AbstractCrudController<RoleDTO, RoleDTO, Integer> {
+public class RoleController extends AbstractCrudController<RoleDTO, RoleDTO, Long> {
     public RoleController(RoleServiceImpl service) {
         super(service);
     }

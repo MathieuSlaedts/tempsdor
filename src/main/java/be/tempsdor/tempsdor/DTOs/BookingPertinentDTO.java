@@ -8,14 +8,16 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookingDTO implements IdentifiedDTO<Long> {
+@NumberOfOccupantsSmallerThanRoomCapacity
+@DepartureDatetimeLaterThanArrivalDatetime
+public class BookingPertinentDTO implements IdentifiedDTO<Long> {
     @NotNull
     Long id;
     @NotNull
@@ -27,7 +29,7 @@ public class BookingDTO implements IdentifiedDTO<Long> {
     @Future
     LocalDate departure;
     @NotNull
-    UserSmallDTO user;
+    Long user;
     @NotNull
-    RoomSmallDTO room;
+    Long room;
 }

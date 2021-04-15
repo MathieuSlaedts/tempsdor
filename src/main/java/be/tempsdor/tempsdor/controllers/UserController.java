@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @PreAuthorize("isAuthenticated()")
 @RequestMapping("/users")
-public class UserController extends AbstractCrudController<UserDTO, UserPertinentDTO, Integer> {
+public class UserController extends AbstractCrudController<UserDTO, UserPertinentDTO, Long> {
 
     protected UserController(UserServiceImpl service) {
         super(service);
@@ -25,13 +25,13 @@ public class UserController extends AbstractCrudController<UserDTO, UserPertinen
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}/update/email")
-    public UserPertinentDTO updateEmailById(@Valid @RequestBody UserEmailOnlyDTO dto, @PathVariable("id") int id) throws ElementNotFoundException {
+    public UserPertinentDTO updateEmailById(@Valid @RequestBody UserEmailOnlyDTO dto, @PathVariable("id") Long id) throws ElementNotFoundException, MismatchingIdentifersException {
        return ((UserServiceImpl)service).updateEmailById(dto, id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("{id}/update/password")
-    public UserPertinentDTO updatePasswordById(@Valid @RequestBody UserPasswordOnlyDTO dto, @PathVariable("id") int id) throws ElementNotFoundException {
+    public UserPertinentDTO updatePasswordById(@Valid @RequestBody UserPasswordOnlyDTO dto, @PathVariable("id") Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         return ((UserServiceImpl)service).updatePasswordById(dto, id);
     }
 }

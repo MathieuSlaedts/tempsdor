@@ -14,9 +14,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RoomPertinentDTO implements IdentifiedDTO<Integer> {
+public class RoomPertinentDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotNull
     @Min(1)
     Integer capacity;
@@ -27,6 +27,7 @@ public class RoomPertinentDTO implements IdentifiedDTO<Integer> {
     @Size(min = 2, max = 50)
     String city;
     @NotNull
-    Integer manager;
-    Set<Integer> bookings;
+    Long manager;
+    Set<Long> bookings;
+    Set<Long> activities;
 }

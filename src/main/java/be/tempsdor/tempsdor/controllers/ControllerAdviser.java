@@ -15,6 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +27,10 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             ElementNotFoundException.class,
             ElementsNotFoundException.class,
-            MismatchingIdentifersException.class
+            MismatchingIdentifersException.class,
+            OwnRoomBookingException.class,
+            RoomUnavailableException.class,
+            NullPropertyException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -40,8 +44,7 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({
-            ElementAlreadyExistsException.class,
-            SQLIntegrityConstraintViolationException.class
+            ElementAlreadyExistsException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody

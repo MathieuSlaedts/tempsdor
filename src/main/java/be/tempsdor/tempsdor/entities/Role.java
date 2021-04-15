@@ -1,5 +1,6 @@
 package be.tempsdor.tempsdor.entities;
 
+import be.tempsdor.tempsdor.configuration.ApplicationConfiguration;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Cascade;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "larnak_role")
+@Table(name = ApplicationConfiguration.DB_TABLE_PREFIX + "role")
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,16 +19,15 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "larnak_user_role",
-//            joinColumns = @JoinColumn(name = "role_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "larnak_user_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     Set<User> users;
 }

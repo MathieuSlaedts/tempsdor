@@ -16,10 +16,9 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class UserDTO implements IdentifiedDTO<Integer> {
-
+public class UserDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotBlank
     @Size(min = 4, max = 20)
     String username;

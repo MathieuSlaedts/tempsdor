@@ -13,9 +13,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserEmailOnlyDTO implements IdentifiedDTO<Integer> {
+public class UserEmailOnlyDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotBlank
     @Email
     String email;

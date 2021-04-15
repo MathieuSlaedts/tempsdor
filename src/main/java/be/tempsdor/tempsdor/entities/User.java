@@ -1,5 +1,6 @@
 package be.tempsdor.tempsdor.entities;
 
+import be.tempsdor.tempsdor.configuration.ApplicationConfiguration;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "larnak_user")
+@Table(name = ApplicationConfiguration.DB_TABLE_PREFIX + "user")
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,34 +23,34 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     String password;
 
-    @Column(name = "lastname", nullable = false)
+    @Column(nullable = false)
     String lastname;
 
-    @Column(name = "firstname", nullable = false)
+    @Column(nullable = false)
     String firstname;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "larnak_user_role",
+            name = ApplicationConfiguration.DB_TABLE_PREFIX + "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     Set<Room> rooms;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     Set<Booking> bookings;
 
     Boolean accountNonExpired;

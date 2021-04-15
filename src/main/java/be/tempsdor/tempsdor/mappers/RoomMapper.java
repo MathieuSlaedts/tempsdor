@@ -32,20 +32,20 @@ public class RoomMapper implements Mapper<RoomDTO, Room> {
     }
 
     @Override
-    public RoomDTO toDTO(Room room) {
-        return room == null
+    public RoomDTO toDTO(Room entity) {
+        return entity == null
                 ? null
                 : RoomDTO.builder()
-                .id(room.getId())
-                .capacity(room.getCapacity())
-                .address(room.getAddress())
-                .city(room.getCity())
-                .user(this.userSmallMapper.toDTO(room.getUser()))
-                .activites(room.getActivities()
+                .id(entity.getId())
+                .capacity(entity.getCapacity())
+                .address(entity.getAddress())
+                .city(entity.getCity())
+                .user(this.userSmallMapper.toDTO(entity.getUser()))
+                .activites(entity.getActivities()
                         .stream()
                         .map(this.activitySmallMapper::toDTO)
                         .collect(Collectors.toSet()))
-                .bookings(room.getBookings()
+                .bookings(entity.getBookings()
                         .stream()
                         .map(this.bookingSmallMapper::toDTO)
                         .collect(Collectors.toSet()))
@@ -53,20 +53,20 @@ public class RoomMapper implements Mapper<RoomDTO, Room> {
     }
 
     @Override
-    public Room toEntity(RoomDTO roomDTO) {
-        return roomDTO == null
+    public Room toEntity(RoomDTO dto) {
+        return dto == null
                 ? null
                 : Room.builder()
-                .id(roomDTO.getId())
-                .capacity(roomDTO.getCapacity())
-                .address(roomDTO.getAddress())
-                .city(roomDTO.getCity())
-                .user(this.userRepository.findById(roomDTO.getUser().getId()).orElse(null))
-                .activities(roomDTO.getActivites()
+                .id(dto.getId())
+                .capacity(dto.getCapacity())
+                .address(dto.getAddress())
+                .city(dto.getCity())
+                .user(this.userRepository.findById(dto.getUser().getId()).orElse(null))
+                .activities(dto.getActivites()
                         .stream()
                         .map(r->this.activityRepository.findById(r.getId()).orElse(null))
                         .collect(Collectors.toSet()))
-                .bookings(roomDTO.getBookings()
+                .bookings(dto.getBookings()
                         .stream()
                         .map(r->this.bookingRepository.findById(r.getId()).orElse(null))
                         .collect(Collectors.toSet()))

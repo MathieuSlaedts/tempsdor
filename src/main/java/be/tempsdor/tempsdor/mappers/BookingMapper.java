@@ -22,34 +22,34 @@ public class BookingMapper implements Mapper<BookingDTO, Booking>{
     }
 
     @Override
-    public BookingDTO toDTO(Booking booking) {
-        return booking == null
+    public BookingDTO toDTO(Booking entity) {
+        return entity == null
                 ? null
                 : BookingDTO.builder()
-                .id(booking.getId())
-                .numberOccupants(booking.getNumberOccupants())
-                .arrivalDatetime(booking.getArrivalDatetime())
-                .departureDatetime(booking.getDepartureDatetime())
-                .user(this.userSmallMapper.toDTO(booking.getUser()))
-                .room(this.roomSmallMapper.toDTO(booking.getRoom()))
+                .id(entity.getId())
+                .numberOccupants(entity.getNumberOccupants())
+                .arrival(entity.getArrival())
+                .departure(entity.getDeparture())
+                .user(this.userSmallMapper.toDTO(entity.getUser()))
+                .room(this.roomSmallMapper.toDTO(entity.getRoom()))
                 .build();
     }
 
     @Override
-    public Booking toEntity(BookingDTO bookingDTO) {
-        return bookingDTO == null
+    public Booking toEntity(BookingDTO dto) {
+        return dto == null
                 ? null
                 : Booking.builder()
-                .id(bookingDTO.getId())
-                .numberOccupants(bookingDTO.getNumberOccupants())
-                .arrivalDatetime(bookingDTO.getArrivalDatetime())
-                .departureDatetime(bookingDTO.getDepartureDatetime())
-                .user(this.userRepository.findById(bookingDTO.getUser().getId()).orElse(null))
-                .room(this.roomRepository.findById(bookingDTO.getRoom().getId()).orElse(null))
+                .id(dto.getId())
+                .numberOccupants(dto.getNumberOccupants())
+                .arrival(dto.getArrival())
+                .departure(dto.getDeparture())
+                .user(this.userRepository.findById(dto.getUser().getId()).orElse(null))
+                .room(this.roomRepository.findById(dto.getRoom().getId()).orElse(null))
                 .build();
     }
 
-    public Integer toListId(Booking booking) {
+    public Long toListId(Booking booking) {
         return booking == null
                 ? null
                 : booking.getId();

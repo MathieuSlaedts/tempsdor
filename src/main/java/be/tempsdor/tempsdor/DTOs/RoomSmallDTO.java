@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class RoomSmallDTO implements IdentifiedDTO<Integer> {
+public class RoomSmallDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
+    String uri;
 }

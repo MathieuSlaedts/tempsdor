@@ -13,9 +13,9 @@ import java.util.Set;
 @Getter @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class RoomDTO implements IdentifiedDTO<Integer> {
+public class RoomDTO implements IdentifiedDTO<Long> {
     @NotNull
-    Integer id;
+    Long id;
     @NotNull
     @Min(1)
     Integer capacity;
@@ -25,6 +25,7 @@ public class RoomDTO implements IdentifiedDTO<Integer> {
     @NotBlank
     @Size(min = 2, max = 50)
     String city;
+    @NotNull
     UserSmallDTO user;
     Set<ActivitySmallDTO> activites;
     Set<BookingSmallDTO> bookings;

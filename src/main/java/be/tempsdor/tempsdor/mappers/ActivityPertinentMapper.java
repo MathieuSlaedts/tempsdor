@@ -1,52 +1,51 @@
 package be.tempsdor.tempsdor.mappers;
 
-import be.tempsdor.tempsdor.DTOs.ActivityDTO;
+import be.tempsdor.tempsdor.DTOs.ActivityPertinentDTO;
 import be.tempsdor.tempsdor.entities.Activity;
 import be.tempsdor.tempsdor.repositories.RoomRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class ActivityMapper implements Mapper<ActivityDTO, Activity> {
-    private final RoomSmallMapper roomSmallMapper;
+public class ActivityPertinentMapper implements Mapper<ActivityPertinentDTO, Activity> {
     private final RoomRepository roomRepository;
 
-    public ActivityMapper(RoomSmallMapper roomSmallMapper, RoomRepository roomRepository) {
-        this.roomSmallMapper = roomSmallMapper;
+    public ActivityPertinentMapper(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
     @Override
-    public ActivityDTO toDTO(Activity entity) {
+    public ActivityPertinentDTO toDTO(Activity entity) {
         return entity == null
                 ? null
-                : ActivityDTO.builder()
+                : ActivityPertinentDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .rooms(Optional.ofNullable(entity.getRooms())
-                        .orElseGet(Collections::emptySet)
+                .rooms(entity.getRooms()
                         .stream()
-                        .map(this.roomSmallMapper::toDTO)
+                        .map(r -> r == null ? null : r.getId())
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toSet()))
                 .build();
     }
 
     @Override
-    public Activity toEntity(ActivityDTO dto) {
+    public Activity toEntity(ActivityPertinentDTO dto) {
         return dto == null
                 ? null
                 : Activity.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
-                .rooms(Optional.ofNullable(dto.getRooms())
-                        .orElseGet(Collections::emptySet)
+                .rooms(dto.getRooms()
                         .stream()
-                        .map(a->this.roomRepository.findById(a.getId()).orElse(null))
+                        .map(r -> r == null ? null : this.roomRepository.findById(r).orElse(null))
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toSet()))
                 .build();
     }

@@ -43,7 +43,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public RoomPertinentDTO add(RoomDTO toAdd) throws ElementAlreadyExistsException, ElementNotFoundException {
+    public RoomPertinentDTO add(RoomPertinentDTO toAdd) throws ElementAlreadyExistsException, ElementNotFoundException {
         if(toAdd == null)
             throw new IllegalArgumentException();
 
@@ -51,7 +51,7 @@ public class RoomServiceImpl implements RoomService {
            throw new ElementAlreadyExistsException("id", toAdd.getId().toString());
 
        Room room = this.roomRepository.saveAndFlush(
-               this.roomMapper.toEntity(toAdd));
+               this.roomPertinenMapper.toEntity(toAdd));
 
         this.entityManager.refresh(
                 this.entityManager.merge(room));
@@ -75,7 +75,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomPertinentDTO getOneById(Integer id) throws ElementNotFoundException {
+    public RoomPertinentDTO getOneById(Long id) throws ElementNotFoundException {
         if(id == null)
             throw new IllegalArgumentException();
 
@@ -87,12 +87,15 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public RoomPertinentDTO update(RoomDTO updatedDatas, Integer id) throws ElementNotFoundException {
+    public RoomPertinentDTO update(RoomPertinentDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         if(updatedDatas == null || id == null)
             throw new IllegalArgumentException();
 
+        if(updatedDatas.getId() != id)
+            throw new MismatchingIdentifersException();
+
         Room room = this.roomRepository.saveAndFlush(
-                this.roomMapper.toEntity(updatedDatas));
+                this.roomPertinenMapper.toEntity(updatedDatas));
 
         this.entityManager.refresh(
                 this.entityManager.merge(room));
@@ -103,7 +106,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteById(Integer id) throws ElementNotFoundException {
+    public void deleteById(Long id) throws ElementNotFoundException {
         if(id == null)
             throw new IllegalArgumentException();
 
@@ -146,7 +149,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Boolean getAvailabilityByDateRange(Integer id, LocalDate arrival, LocalDate departure) throws ElementNotFoundException {
+    public Boolean getAvailabilityByDateRange(Long id, LocalDate arrival, LocalDate departure) throws ElementNotFoundException {
         if(id == null || arrival == null || departure == null)
             throw new IllegalArgumentException();
 
@@ -154,20 +157,11 @@ public class RoomServiceImpl implements RoomService {
                 .findById(id)
                 .orElseThrow(ElementNotFoundException::new);
 
-        for (Booking booking : room.getBookings()) {
-            if(
-                    (arrival.isAfter(booking.getArrivalDatetime().toLocalDate())
-                            && arrival.isBefore(booking.getDepartureDatetime().toLocalDate()))
-                    || (departure.isAfter(booking.getArrivalDatetime().toLocalDate())
-                            && departure.isBefore(booking.getDepartureDatetime().toLocalDate()))
-            )
-                return false;
-        }
-        return true;
+        return room.isAvailable(arrival, departure);
     }
 
     @Override
-    public RoomPertinentDTO updateManagerById(RoomManagerIdOnlyDTO updatedDatas, Integer id) throws ElementNotFoundException, MismatchingIdentifersException {
+    public RoomPertinentDTO updateManagerById(RoomManagerIdOnlyDTO updatedDatas, Long id) throws ElementNotFoundException, MismatchingIdentifersException {
         if(updatedDatas == null || id == null)
             throw new IllegalArgumentException();
 

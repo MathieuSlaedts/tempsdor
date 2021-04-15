@@ -18,4 +18,5 @@ public class ActivitySmallDTO implements IdentifiedDTO<Long> {
     @NotBlank
     @Size(max = 20)
     String name;
+    String uri;
 }
